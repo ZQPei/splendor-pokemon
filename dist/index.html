@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142b24">
+  <meta name="description" content="关都主题的璀璨宝石宝可梦网页版。收集精灵球、捕捉和进化宝可梦。">
+  <title>璀璨宝石 · 宝可梦</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><i class="ball brand-ball" data-color="red" aria-hidden="true"></i><div><strong>璀璨宝石 <span>· 宝可梦</span></strong><small>SPLENDOR POKÉMON</small></div></div>
+      <nav id="game-tools" aria-label="游戏工具" hidden>
+        <button type="button" class="nav-link" data-do="home">主菜单</button>
+        <button type="button" class="nav-link" data-do="catalog">卡牌列表</button>
+        <button type="button" class="nav-link" data-do="invite" hidden>邀请链接</button>
+        <button type="button" class="nav-link" data-do="dex">图鉴</button>
+        <button type="button" class="nav-link" data-do="rules"><span class="help-icon" aria-hidden="true">?</span> 规则</button>
+        <button type="button" class="new-game" data-do="setup"><span aria-hidden="true">＋</span> 新对局</button>
+      </nav>
+    </div>
+  </header>
+  <main id="home-screen" class="shell">
+    <section class="home-hero" aria-labelledby="home-title">
+      <div class="home-main">
+        <h1 id="home-title" tabindex="-1">璀璨宝石<span>宝可梦</span></h1>
+        <p class="home-intro">收集精灵球，捕捉宝可梦，组建你的关都队伍。</p>
+        <div class="home-actions">
+          <button id="continue-game" type="button" class="primary" data-do="continue" hidden>继续对局</button>
+          <button id="home-new-game" type="button" class="primary" data-do="setup">开始新局</button>
+          <button type="button" class="home-secondary" data-do="online">联机对战</button>
+          <button type="button" class="home-secondary" data-do="catalog">卡牌列表 <span aria-hidden="true">↗</span></button>
+        </div>
+        <p id="home-save" class="home-save" hidden></p>
+        <div class="home-links">
+          <button type="button" class="nav-link" data-do="rules">游戏规则</button>
+          <button type="button" class="nav-link" data-do="dex">收集图鉴</button>
+        </div>
+      </div>
+      <div class="home-art" aria-hidden="true">
+        <span class="home-orbit"></span>
+        <img class="hero-charizard" src="./assets/6.webp" alt="">
+        <img class="hero-venusaur" src="./assets/3.webp" alt="">
+        <img class="hero-blastoise" src="./assets/9.webp" alt="">
+      </div>
+    </section>
+  </main>
+  <main id="online-screen" class="shell" hidden>
+    <section class="online-panel panel">
+      <button type="button" class="secondary" data-do="home">← 返回主菜单</button>
+      <h1 tabindex="-1">联机对战</h1>
+      <div id="online-content"></div>
+      <p id="online-message" role="status" class="online-message"></p>
+    </section>
+  </main>
+  <main id="catalog-screen" class="shell" hidden>
+    <div class="catalog-heading">
+      <button id="catalog-back" type="button" class="secondary" data-do="back">← 返回主菜单</button>
+      <h1 id="catalog-title" tabindex="-1">卡牌列表</h1>
+      <p id="catalog-total"></p>
+    </div>
+    <div class="catalog-toolbar">
+      <label class="catalog-search">搜索宝可梦
+        <input id="card-search" type="search" placeholder="输入名字或图鉴编号">
+      </label>
+      <div class="catalog-filters" aria-label="卡牌类别">
+        <button type="button" class="secondary" data-do="catalog-filter" data-id="all" aria-pressed="true">全部</button>
+        <button type="button" class="secondary" data-do="catalog-filter" data-id="normal" aria-pressed="false">进化链</button>
+        <button type="button" class="secondary" data-do="catalog-filter" data-id="rare" aria-pressed="false">稀有</button>
+        <button type="button" class="secondary" data-do="catalog-filter" data-id="legendary" aria-pressed="false">传说</button>
+      </div>
+    </div>
+    <p class="catalog-result" id="catalog-result" role="status"></p>
+    <div id="catalog-groups"></div>
+  </main>
+  <main id="game-screen" class="shell" hidden>
+    <section class="page-heading" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title" tabindex="-1">关都对战桌</h1>
+        <p id="match-summary"></p>
+      </div>
+      <div id="turn-state" aria-live="polite"></div>
+    </section>
+    <p id="network-status" class="online-game-status" role="status" hidden></p>
+    <div class="table-layout">
+      <section id="market" aria-label="宝可梦展示区"></section>
+      <aside class="side" aria-label="训练家与资源">
+        <section id="trainers" class="panel" aria-label="训练家得分"></section>
+        <section id="supply" class="panel" aria-label="公共精灵球"></section>
+        <section id="team" class="panel" aria-label="当前训练家的队伍"></section>
+      </aside>
+    </div>
+  </main>
+  <dialog id="modal" aria-labelledby="modal-title"></dialog>
+  <div id="announcement" class="sr-only" role="status"></div>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
