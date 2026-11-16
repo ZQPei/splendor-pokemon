@@ -37,7 +37,9 @@ BIND_HOST=0.0.0.0 PUBLIC_ORIGIN="http://$pokemon_lan_ip:8766" node server.mjs
 
 ### 发布公网房间服务
 
-在本目录运行 `npx wrangler@4 login`，再运行 `npx wrangler@4 deploy`。把部署输出的 HTTPS 源地址设为 `ZQPei/game` 仓库的 Actions 变量 `SPLENDOR_POKEMON_ROOM_SERVER`，然后重新运行 **Deploy game catalog**。游戏页会连接这个源地址，邀请链接仍然指向 GitHub Pages。
+在游戏源码仓库的 Actions Secrets 中配置 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN`，然后运行 **Deploy Pokémon room server**。Cloudflare 令牌使用 **Edit Cloudflare Workers** 模板，资源范围选择部署所用账号。也可以在本目录登录 Wrangler 后直接运行 `npx wrangler@4 deploy`。 [Cloudflare 的 GitHub Actions 部署说明](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/)
+
+把部署输出的 HTTPS 源地址设为 `ZQPei/game` 仓库的 Actions 变量 `SPLENDOR_POKEMON_ROOM_SERVER`，然后运行 **Deploy game catalog**。游戏页会连接这个源地址，邀请链接仍然指向 GitHub Pages。
 
 每个公网房间用一个 Durable Object 持久保存，连续 24 小时没有房间操作会过期。刷新邀请链接时，同一个浏览器会重新加入原座位。 [Cloudflare Durable Objects 部署文档](https://developers.cloudflare.com/durable-objects/get-started/)
 
