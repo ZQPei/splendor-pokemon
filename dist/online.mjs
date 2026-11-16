@@ -2,6 +2,7 @@ const root = document.querySelector('#online-screen');
 const content = document.querySelector('#online-content');
 const message = document.querySelector('#online-message');
 const gameMessage = document.querySelector('#network-status');
+const roomServer = document.querySelector('meta[name="room-server"]')?.content;
 const sessionKey = 'splendor-pokemon.online-room';
 const escape = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -19,7 +20,7 @@ let requestedRoom = '';
 let opening = false;
 
 async function request(path, body, seatToken) {
-  const response = await fetch(path, {
+  const response = await fetch(new URL(path, roomServer || location.origin), {
     method: body ? 'POST' : 'GET',
     headers: {
       ...(body ? { 'Content-Type': 'application/json' } : {}),
@@ -50,7 +51,9 @@ function showMessage(text, error = false) {
 
 export function inviteUrl() {
   if (!room) return '';
-  const url = new URL('/', room.publicOrigin || location.origin);
+  const url = new URL(room.publicOrigin || location.href);
+  url.search = '';
+  url.hash = '';
   url.searchParams.set('room', room.id);
   return url.href;
 }
@@ -125,7 +128,7 @@ function sync(next) {
 
 function schedulePoll() {
   clearTimeout(timer);
-  if (room) timer = setTimeout(poll, 1050);
+  if (room && !room.state?.isGameOver) timer = setTimeout(poll, document.hidden ? 5000 : 1050);
 }
 
 async function poll() {
@@ -189,6 +192,8 @@ export async function openOnline(id, newRoom = false) {
       url.searchParams.set(requestedRoom ? 'room' : 'online', requestedRoom || '1');
       content.innerHTML = '<p>联机大厅由独立的游戏服务提供。</p><a class="primary room-link" href="' +
         escape(url.href) + '">打开联机大厅</a>';
+    } else if (roomServer) {
+      content.innerHTML = '<p>联机服务器暂时不可用，请稍后重试。</p>';
     } else {
       content.innerHTML = '<p>本站尚未配置联机服务器。可以返回主菜单玩单人或同屏对战。</p>';
     }

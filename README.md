@@ -2,7 +2,7 @@
 
 HTML、CSS 和 JavaScript 实现的本机对战桌。在主菜单选择「开始新局」，可以和电脑小茂对战，也可以选择 2–4 人同屏轮流操作。
 
-[GitHub Pages 版](https://zqpei.github.io/game/splendor-pokemon/)提供单人、同屏对战和卡牌列表。联机房间使用下方的 Node.js 服务。
+[GitHub Pages 版](https://zqpei.github.io/game/splendor-pokemon/)提供单人、同屏对战和卡牌列表。配置下方的 Cloudflare 房间服务后，即可从同一网址发起公网联机。
 
 ## 运行
 
@@ -33,9 +33,13 @@ BIND_HOST=0.0.0.0 PUBLIC_ORIGIN="http://$pokemon_lan_ip:8766" node server.mjs
 
 房主打开 [联机大厅](http://127.0.0.1:8766/?online=1)。系统生成的邀请链接采用 `PUBLIC_ORIGIN`。只在本机测试时，可以直接运行 `node server.mjs` 并在各浏览器会话使用同一个服务。
 
-异地朋友需要能访问服务器。把此目录放到公开可达的 Node.js 主机上，或把独立游戏端口 8766 接到支持 HTTPS 的反向代理或临时隧道，再从公开 HTTPS 地址打开大厅创建房间。可选地设置 `PUBLIC_ORIGIN` 来指定邀请链接地址。 [Cloudflare 临时隧道说明](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/)
+房间状态由本机 Node.js 服务保存在内存中。关闭服务或房间连续 24 小时没有操作会结束该房间。单人与同屏模式的存档保存在浏览器里。
 
-房间状态由服务端保存于内存。同一浏览器刷新邀请链接会重新加入原座位。关闭服务或房间连续 24 小时没有操作会结束该房间。单人与同屏模式仍使用浏览器里的原存档。
+### 发布公网房间服务
+
+在本目录运行 `npx wrangler@4 login`，再运行 `npx wrangler@4 deploy`。把部署输出的 HTTPS 源地址设为 `ZQPei/game` 仓库的 Actions 变量 `SPLENDOR_POKEMON_ROOM_SERVER`，然后重新运行 **Deploy game catalog**。游戏页会连接这个源地址，邀请链接仍然指向 GitHub Pages。
+
+每个公网房间用一个 Durable Object 持久保存，连续 24 小时没有房间操作会过期。刷新邀请链接时，同一个浏览器会重新加入原座位。 [Cloudflare Durable Objects 部署文档](https://developers.cloudflare.com/durable-objects/get-started/)
 
 ## 规则与素材
 
